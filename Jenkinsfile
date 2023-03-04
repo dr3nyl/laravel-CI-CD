@@ -42,10 +42,24 @@ pipeline {
             }
         }
         stage("Populate .env file") {
+	    environment {
+                DB_HOST = credentials("laravel-host")
+                DB_DATABASE = credentials("laravel-database")
+                DB_USERNAME = credentials("laravel-user")
+                DB_PASSWORD = credentials("laravel-password")
+            }
             steps {
-                dir("/var/lib/jenkins/workspace/envs/laravel-test") {
-                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: '.env', targetLocation: "${WORKSPACE}")])
-                }
+                sh 'php --version'
+                sh 'composer install'
+                sh 'composer --version'
+                sh 'cp .env.example .env'
+                sh 'echo DB_HOST=${DB_HOST} >> .env'
+                sh 'echo DB_USERNAME=${DB_USERNAME} >> .env'
+                sh 'echo DB_DATABASE=${DB_DATABASE} >> .env'
+                sh 'echo DB_PASSWORD=${DB_PASSWORD} >> .env'
+                sh 'php artisan key:generate'
+                sh 'cp .env .env.testing'
+                sh 'php artisan migrate'
             }
         }              
         stage("Run Tests") {
