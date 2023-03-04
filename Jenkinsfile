@@ -18,7 +18,7 @@ pipeline {
  //                   '''
  //               }
  //           }
- //       }        
+  //       }        
         stage("Clear all running docker containers") {
             steps {
                 script {
