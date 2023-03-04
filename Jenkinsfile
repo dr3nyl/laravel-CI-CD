@@ -41,9 +41,15 @@ pipeline {
                 sh 'docker compose run --rm composer install'
             }
         }
+	stage("Populate .env file") {
+            steps {
+                dir("/var/lib/jenkins/workspace/envs/laravel-test") {
+                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: '.env', targetLocation: "${WORKSPACE}")])
+                }
+            }
+        } 
         stage("Run Tests") {
             steps {
-		sh 'docker compose run artisan key:generate'
                 sh 'docker compose run --rm artisan test'
             }
         }
