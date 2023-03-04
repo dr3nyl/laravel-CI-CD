@@ -8,10 +8,6 @@ services:
     build:
       context: ./dockerfiles
       dockerfile: nginx.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-        - USER=${USER:-youruser}
     container_name: nginx
     ports:
       - 80:80
@@ -46,10 +42,6 @@ services:
     build:
       context: ./dockerfiles
       dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-        - USER=${USER:-youruser}
     container_name: php
     volumes:
       - ./:/var/www/html:delegated
@@ -69,17 +61,12 @@ services:
     build:
       context: ./dockerfiles
       dockerfile: composer.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-        - USER=${USER:-youruser}
     container_name: composer
     volumes:
       - ./:/var/www/html
     working_dir: /var/www/html
     depends_on:
       - php
-    user: ${USER:-youruser}
     entrypoint: ['composer', '--ignore-platform-reqs']
     networks:
       - laravel
@@ -101,10 +88,6 @@ services:
     build:
       context: ./dockerfiles
       dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-        - USER=${USER:-youruser}
     container_name: artisan
     volumes:
       - ./:/var/www/html:delegated
