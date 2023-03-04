@@ -43,6 +43,7 @@ pipeline {
         }
         stage("Run Tests") {
             steps {
+		sh 'docker compose artisan key:generate'
                 sh 'docker compose run --rm artisan test'
             }
         }
