@@ -60,7 +60,7 @@ pipeline {
             sh 'rm -rf artifact.zip'
             sh 'zip -r artifact.zip . -x "*node_modules**"'
             withCredentials([sshUserPrivateKey(credentialsId: "aws-ec2", keyFileVariable: 'keyfile')]) {
-                sh 'scp -v -o StrictHostKeyChecking=no -i ${keyfile} /var/lib/jenkins/workspace/laravel-cicd/artifact.zip ec2-user@18.141.173.164:/home/ec2-user/artifact'
+                sh 'scp -v -o StrictHostKeyChecking=no -i /home/vagrant/Project/keys/laravel-cicd.pem /var/lib/jenkins/workspace/laravel-cicd/artifact.zip ec2-user@18.141.173.164:/home/ec2-user/artifact'
             }
            /* sshagent(credentials: ['aws-ec2']) {
                 sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.213.62.3 unzip -o /home/ec2-user/artifact/artifact.zip -d /var/www/html'
